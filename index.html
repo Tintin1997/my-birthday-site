@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday!</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #ffcc33 0%, #ff6666 100%);
+            margin: 0;
+            overflow: hidden;
+        }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            max-width: 500px;
+            max-height: 80vh; /* เพิ่ม max-height เพื่อให้เลื่อนดูได้ */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            animation: fadeIn 2s ease-in-out;
+            overflow-y: auto;
+        }
+        h1 {
+            color: #ff6347;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 20px;
+            color: #333;
+        }
+        img {
+            max-width: 80%;
+            height: auto;
+            border-radius: 10px;
+            margin: 20px auto 10px auto; /* จัดกึ่งกลางเค้ก */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            animation: bounce 2s infinite;
+        }
+        .buttons {
+            margin: 20px 0;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #ff6347;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        button:hover {
+            background-color: #ff4500;
+            transform: scale(1.1);
+        }
+        #play-music-button {
+            font-size: 14px;
+            padding: 5px 10px;
+            display: block;
+            margin: 10px auto; /* จัดกึ่งกลางปุ่มเล่นเพลง */
+        }
+        #response {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+        #page2, #not-section, #full-greeting, #response-buttons, #back-button {
+            display: none;
+        }
+        .cat-images, .dog-images {
+            display: none;
+            margin-top: 10px;
+        }
+        .cat-images img, .dog-images img {
+            max-width: 30%;
+            height: auto;
+            border: 5px solid #ff6347;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .fireworks {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200px;
+            height: 200px;
+            background: url('fireworks.gif') no-repeat center center;
+            background-size: contain;
+            pointer-events: none;
+            opacity: 0;
+            animation: fireworks 2s infinite ease-in-out;
+        }
+        @keyframes fireworks {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+    </style>
+    <script>
+        function choose(choice) {
+            document.getElementById('user-choice').innerText = 'วันนี้วันเกิดของ ' + choice + '!';
+            if (choice === 'ขนุน') {
+                document.querySelector('.cat-images').style.display = 'block';
+                document.querySelector('.dog-images').style.display = 'none';
+                document.getElementById('not-section').style.display = 'block';
+            } else {
+                document.querySelector('.dog-images').style.display = 'block';
+                document.querySelector('.cat-images').style.display = 'none';
+                document.getElementById('full-greeting').style.display = 'block';
+                document.getElementById('response-buttons').style.display = 'block';
+            }
+            document.getElementById('page1').style.display = 'none';
+            document.getElementById('page2').style.display = 'block';
+        }
+        function showResponse(answer) {
+            if (answer === 'no') {
+                document.getElementById('page1').style.display = 'block';
+                document.getElementById('page2').style.display = 'none';
+                document.querySelector('.cat-images').style.display = 'none';
+                document.querySelector('.dog-images').style.display = 'none';
+                document.getElementById('not-section').style.display = 'none';
+            }
+        }
+        function showOkResponse(response) {
+            if (response === 'โอเค') {
+                document.getElementById('response').innerHTML = 'ดีมาก! เชื่อมั่นในตัวเองเข้าไว้ เอาตั๋วหนังฟรีไป1ใบ!<br><img src="ticket.jpg" alt="Movie Ticket">';
+            } else {
+                document.getElementById('response').innerHTML = 'ไม่เป็นไรนะ ขอให้มีความเชื่อมั่นในตัวเองมากขึ้น เอามัทฉะลาเต้ไปกินปลอบใจ!<br><img src="matcha.jpg" alt="Matcha Latte">';
+            }
+            document.getElementById('response-buttons').style.display = 'none';
+            document.getElementById('back-button').style.display = 'block';
+            document.querySelector('.container').style.height = 'auto'; // ปรับขนาด container ให้เป็น auto เพื่อให้เห็นทั้งหมด
+        }
+        function goBack() {
+            document.getElementById('response').innerText = '';
+            document.getElementById('back-button').style.display = 'none';
+            document.getElementById('response-buttons').style.display = 'block';
+            document.querySelector('.container').style.height = '80vh'; // ตั้งขนาด container ให้เต็ม
+        }
+        window.onload = function() {
+            var audio = document.createElement('audio');
+            audio.id = 'birthday-song';
+            audio.src = 'birthday_song.mp3';
+            audio.type = 'audio/mpeg';
+            audio.autoplay = true;
+            audio.loop = true;
+            audio.volume = 0.5; // ปรับระดับเสียงตามความเหมาะสม
+            document.body.appendChild(audio);
+        }
+    </script>
+</head>
+<body>
+    <div class="fireworks"></div>
+    <div id="page1" class="container">
+        <h1>Happy Birthday to youuuu!</h1>
+        <img src="cake.jpg" alt="Birthday Cake">
+        <p>วันนี้วันเกิดใครรรรร ?</p>
+        <div class="buttons">
+            <button onclick="choose('ขนุน')">ขนุน</button>
+            <button onclick="choose('หมาแดง')">หมาแดง</button>
+        </div>
+        <!-- ปุ่ม Play Music -->
+        <button id="play-music-button" onclick="document.getElementById('birthday-song').play()">กดเล่นเพลง</button>
+    </div>
+    <div id="page2" class="container">
+        <h1>Surprise!</h1>
+        <p id="user-choice"></p>
+        <div class="cat-images">
+            <img src="cat1.jpg" alt="Cat 1">
+            <img src="cat2.jpg" alt="Cat 2">
+        </div>
+        <div class="dog-images">
+            <img src="cute_dog.jpg" alt="Cute Dog" style="width: 100%; height: auto;">
+        </div>
+        <div id="not-section">
+            <div class="buttons">
+                <button onclick="showResponse('no')">ไม่ใช่</button>
+            </div>
+        </div>
+        <div id="full-greeting">
+            <p>ขอให้มีความสุขมากๆ สุขภาพแข็งแรง ปีนี้พี่อยากขออะไรเธอสักอย่าง คือ</p>
+            <p>ขอให้เธอเชื่อมั่นในตัวเองให้มากๆ เชื่อมั่นว่าเราสามารถทำอะไรได้ดีด้วยตัวเอง พี่เป็นกำลังใจให้นาา </p>
+            <p>จู้ๆนาาาา โอเคมั้ย?</p>
+            <div id="response-buttons" class="buttons">
+                <button onclick="showOkResponse('โอเค')">โอเค</button>
+                <button onclick="showOkResponse('ไม่โอเค')">ไม่โอเค</button>
+            </div>
+        </div>
+        <div id="response"></div>
+        <div id="back-button" class="buttons">
+            <button onclick="goBack()">Back</button>
+        </div>
+        <div class="buttons">
+            <button onclick="location.reload()">กลับสู่หน้าหลัก</button>
+        </div>
+    </div>
+</body>
+</html>
+
